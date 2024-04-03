@@ -1,39 +1,14 @@
 <?php
 
+use App\Http\Controllers\RiotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
-Route::get('/lol/summoner/v4/summoners/by-name/{summonerName}', function () {
-    $data = null;
-    $filename = 'api_data.json';
-    $expirationTime = now()->addMinutes(60); // Set expiration time (e.g., 60 minutes from now)
+Route::get('/lol/data/{summonerName}', [RiotController::class, 'getData']);
 
-    // Check if the file exists and is not expired
-    if (Storage::exists($filename)) { 
-        $data = Storage::get($filename);
-        $data = json_decode($data, true);
-
-        // Check expiration time
-        if (Carbon::parse($data['expiration_time'])->isFuture()) {
-            return $data['data'];
-        }
-    }
-
-    // Fetch new data from the API
-    $response = Http::get('https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summonerName}');
-
-    if ($response->successful()) {
-        $data = $response->json();
-
-        // Save data to local file
-        Storage::put($filename, json_encode(['data' => $data, 'expiration_time' => $expirationTime]));
-    } else {
-        return "Failed to fetch data from the API";
-    }
-
-    return $data;
-});
 
 Route::get('/', function () {
 
