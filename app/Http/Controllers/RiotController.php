@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RiotController extends Controller
 {
-    public function getData($summonerName)
+    public function getData($region, $summonerName)
     {
 
 
@@ -33,7 +33,7 @@ class RiotController extends Controller
         // Fetch new data from the API
         $response = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
-        ])->get('https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summonerName);
+        ])->get('https://' . $region . '.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summonerName);
 
 
 
@@ -44,7 +44,6 @@ class RiotController extends Controller
             // Storage::put($filename, json_encode(['data' => $data, 'expiration_time' => $expirationTime]));
             return response()->json($data,);
         } else {
-            return "Failed to fetch data from the API";
             return response()->json(['error' => "Failed to fetch Riot api"]);
         }
 

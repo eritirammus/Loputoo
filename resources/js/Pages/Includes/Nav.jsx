@@ -15,6 +15,8 @@ export default function Nav({
   setGameName,
   tagline,
   setTagline,
+  region,
+  setRegion,
   apiData,
   setApiData,
 }) {
@@ -25,7 +27,7 @@ export default function Nav({
       setTagline(value[1]);
 
       axios
-        .get(`/api/lol/data/${value[0]}`, {
+        .get(`/api/lol/data/${region}/${value[0]}`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -47,21 +49,35 @@ export default function Nav({
 
   return (
     <nav>
-      <div className="grid grid-cols-12 px-7 pt-5 items-center">
-        <div className="flex justify-center col-span-1">
+      <div className="grid grid-cols-12 gap-x-4 px-7 pt-5 items-center">
+        <div className="flex justify-start col-span-1">
           <Link href="/">
             <ApplicationLogo />
           </Link>
         </div>
-        <div className="flex justify-center col-span-2">EUNE{/* region */}</div>
-        <div className="grid col-span-6">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSearch();
-            }}
-            className="w-full flex gap-2 h-8 "
-          >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+          className=" col-span-8 w-full grid grid-cols-8 gap-4"
+        >
+          <div className="flex justify-center col-span-2 w-full">
+            {/* region */}
+            <select
+              name="region"
+              id="region"
+              className="w-full bg-transparent border px-2 rounded-md"
+              onChange={(e) => {
+                setRegion(e.target.value);
+              }}
+            >
+              <option value="eun1">EUNE</option>
+              <option value="euw1">EUW</option>
+              <option value="na1">NA</option>
+            </select>
+          </div>
+          <div className="col-span-6 flex gap-2 w-full">
             <Input
               onChange={(e) => {
                 setQuery(e.target.value);
@@ -73,8 +89,8 @@ export default function Nav({
               value="🔍"
               className="border rounded px-2 h-full"
             />
-          </form>
-        </div>
+          </div>
+        </form>
         <div className="flex justify-center col-span-2">{/* Language */}</div>
         <div className="flex justify-center col-span-2">{/* Burgir */}</div>
       </div>
