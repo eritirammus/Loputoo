@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class RiotController extends Controller
 {
-    public function getData($region, $summonerName)
+    public function getData($region, $gameName , $tagLine)
     {
-
-
         $data = null;
         $filename = 'api_data.json';
         $expirationTime = now()->addMinutes(60); // Set expiration time (e.g., 60 minutes from now)
@@ -28,29 +26,41 @@ class RiotController extends Controller
         //         return $data['data'];
         //     }
         // }
-        Log::info('https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summonerName);
-
         // Fetch new data from the API
+
         $response = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
-        ])->get('https://' . $region . '.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summonerName);
-
-
+        ])->get('https://' . 'europe' . '.api.riotgames.com/riot/account/v1/accounts/by-riot-id/' . $gameName . '/' . $tagLine);
 
         if ($response->successful()) {
-            $data = $response->json();
 
-            // Save data to local file
-            // Storage::put($filename, json_encode(['data' => $data, 'expiration_time' => $expirationTime]));
-            return response()->json($data,);
+            $response2 = Http::withHeaders([
+                'X-Riot-Token' => env('VITE_LOL_API_KEY')
+            ])->get('https://' . $region . '.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/' . $response['puuid']);
+                Log::info($response2);
+
+            if ($response2->successful()) {
+                // return response()->json($response2->json());
+
+                $response3 = Http::withHeaders([
+                    'X-Riot-Token' => env('VITE_LOL_API_KEY')
+                ])->get('https://' . $region . '.api.riotgames.com/lol/league/v4/entries/by-summoner/' . $response2['id']);
+                    Log::info($response3);
+            } else {
+                return response()->json(['error' => "Failed to fetch Riot api"]);
+            }
+
+            return response()->json(['data1' => $response->json(), 'data2' => $response2->json(), 'data3' => $response3->json()]);
         } else {
             return response()->json(['error' => "Failed to fetch Riot api"]);
         }
-
+        
         // return $data;
-
-
-
         // return response()->json($summonerName);
     }
+
 }
+
+
+
+

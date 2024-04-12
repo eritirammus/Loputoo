@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-Route::get('/lol/data/{region}/{summonerName}', [RiotController::class, 'getData']);
+Route::get('/lol/data/{region}/{gameName}/{tagLine}', [RiotController::class, 'getData']);
 
 
 Route::get('/', function () {

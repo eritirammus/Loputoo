@@ -4,6 +4,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { Badge } from "@/Components/ui/badge";
+import { Progress } from "@/Components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import Nav from "@/Pages/Includes/Nav";
 import { useState } from "react";
@@ -15,7 +16,7 @@ export default function Home({ auth }) {
   const [tagline, setTagline] = useState("");
   const [apiData, setApiData] = useState();
   const [badgeColor, setBadgeColor] = useState("");
-  const [region, setRegion] = useState();
+  const [region, setRegion] = useState("Select Region");
 
   function getImageColorAndInvert(url) {
     const img = new Image();
@@ -81,7 +82,7 @@ export default function Home({ auth }) {
   function rgbaColor(r, g, b, a) {
     const value = `rgba(${r}, ${g}, ${b}, ${a})`;
 
-    setBadgeColor(value)
+    setBadgeColor(value);
     return `rgba(${r}, ${g}, ${b}, ${a})`;
   }
 
@@ -121,7 +122,7 @@ export default function Home({ auth }) {
                     <AvatarImage
                       src={
                         "https://blitz-cdn.blitz.gg/blitz/lol/profileicon/" +
-                        apiData?.profileIconId +
+                        apiData?.data2.profileIconId +
                         ".webp"
                       }
                     />
@@ -134,14 +135,58 @@ export default function Home({ auth }) {
                     style={{ background: badgeColor }}
                   >
                     <h2 className="w-full text-center">
-                      {apiData?.summonerLevel}
+                      {apiData?.data2.summonerLevel}
                     </h2>
                   </div>
                 </div>
               </div>
+              <div className="w-full pb-4 flex flex-col items-center justify-center">
+                <h1 className="text-xl font-bold text-white">
+                  {`${gameName}#${tagline}`}
+                </h1>
+
+                <div className="flex space-between">
+                  <h1 className="text-lg font-semibold">
+                    {apiData?.data3[0].tier} {apiData?.data3[0].rank} {}
+                    {apiData?.data3[0].leaguePoints}LP
+                  </h1>
+                </div>
+                <div className="p-4 w-full">
+                  <Progress value={apiData?.data3[0].leaguePoints} />
+                </div>
+             
+                <div className="flex justify-between">
+                  <h1 className="text-lg font-semibold">
+                    {apiData?.data3[1].tier} {apiData?.data3[1].rank} {}
+                    {apiData?.data3[1].leaguePoints}LP
+                  </h1>
+                </div>
+                <div className="p-4 w-full">
+                  <Progress value={apiData?.data3[1].leaguePoints} />
+                </div>
+              </div>
             </div>
             <div className="h-auto w-full overflow-hidden shadow-sm  col-span-3 grid grid-cols-1 gap-4">
-              <div className="p-7 text-textPurple bg-[#1A1A22] sm:rounded-xl"></div>
+              <div className="p-7 text-textPurple bg-[#1A1A22] sm:rounded-xl">
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="bg-[#1A1A22] sm:rounded-xl">
+                    <div className="flex justify-between items-center">
+                      <h2 className="text-lg font-bold text-textPurple">
+                        Recent Matches
+                      </h2>
+                      <Button variant="primary">View All</Button>
+                    </div>
+                    <div className="absolute w-790 h-90 left-30 top-30 bg-[#16161C] rounded-20">
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
+                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
+                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
+                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="p-7 text-textPurple bg-[#1A1A22] sm:rounded-xl"></div>
             </div>
           </div>

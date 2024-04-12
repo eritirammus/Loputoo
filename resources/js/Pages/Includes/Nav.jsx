@@ -5,7 +5,6 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
-import { Badge } from "@/Components/ui/badge";
 import axios from "axios";
 
 export default function Nav({
@@ -21,13 +20,15 @@ export default function Nav({
   setApiData,
 }) {
   function handleSearch() {
-    if (query) {
+    if (query && region) {
       let value = query.split("#");
       setGameName(value[0]);
+      console.log(value[0]);
       setTagline(value[1]);
+      console.log(value[1]);
 
       axios
-        .get(`/api/lol/data/${region}/${value[0]}`, {
+        .get(`/api/lol/data/${region}/${value[0]}/${value[1]}`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -44,6 +45,8 @@ export default function Nav({
         .catch((error) => {
           console.log("Error:", error);
         });
+    } else {
+      console.log("Your region/gamename hasn't been selected");
     }
   }
 
@@ -72,9 +75,20 @@ export default function Nav({
                 setRegion(e.target.value);
               }}
             >
+              <option value="" selected>
+                Select region
+              </option>
+              <option value="br1">BR</option>
               <option value="eun1">EUNE</option>
               <option value="euw1">EUW</option>
+              <option value="jp1">JP</option>
+              <option value="kr">KR</option>
+              <option value="la1">LAN</option>
+              <option value="la2">LAS</option>
               <option value="na1">NA</option>
+              <option value="oc1">OCE</option>
+              <option value="tr1">TR</option>
+              <option value="ru">RU</option>
             </select>
           </div>
           <div className="col-span-6 flex gap-2 w-full">
