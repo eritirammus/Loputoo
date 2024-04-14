@@ -145,25 +145,25 @@ export default function Home({ auth }) {
                   {`${gameName}#${tagline}`}
                 </h1>
 
-                <div className="flex space-between">
-                  <h1 className="text-lg font-semibold">
-                    {apiData?.data3[0].tier} {apiData?.data3[0].rank} {}
-                    {apiData?.data3[0].leaguePoints}LP
-                  </h1>
-                </div>
-                <div className="p-4 w-full">
-                  <Progress value={apiData?.data3[0].leaguePoints} />
-                </div>
-             
-                <div className="flex justify-between">
-                  <h1 className="text-lg font-semibold">
-                    {apiData?.data3[1].tier} {apiData?.data3[1].rank} {}
-                    {apiData?.data3[1].leaguePoints}LP
-                  </h1>
-                </div>
-                <div className="p-4 w-full">
-                  <Progress value={apiData?.data3[1].leaguePoints} />
-                </div>
+                {apiData?.data3?.map((data) => (
+                  <div className="w-full p-5" key={data.id}>
+                    <div className="">
+                      <h1 className="text-lg">
+                        {data.queueType}
+                      </h1>
+                      <h1 className="text-lg font-semibold">
+                        {data.tier} {data.rank} {}
+                        {data.leaguePoints}LP
+                      </h1>
+                    </div>
+                    <div className="">
+                      <h2>
+                        {data.wins}W {data.losses}L
+                      </h2>
+                      <Progress className="w-full" value={data.leaguePoints} />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
             <div className="h-auto w-full overflow-hidden shadow-sm  col-span-3 grid grid-cols-1 gap-4">
@@ -175,6 +175,10 @@ export default function Home({ auth }) {
                         Recent Matches
                       </h2>
                       <Button variant="primary">View All</Button>
+
+                      <div className="flex items-center">
+                        
+                      </div>
                     </div>
                     <div className="absolute w-790 h-90 left-30 top-30 bg-[#16161C] rounded-20">
                       <div className="grid grid-cols-1 gap-4">
