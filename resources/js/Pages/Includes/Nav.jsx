@@ -7,6 +7,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import axios from "axios";
 
+
 export default function Nav({
   query,
   setQuery,
@@ -50,6 +51,7 @@ export default function Nav({
     }
   }
 
+
   return (
     <nav>
       <div className="grid grid-cols-12 gap-x-4 px-7 pt-5 items-center">
@@ -63,7 +65,7 @@ export default function Nav({
             e.preventDefault();
             handleSearch();
           }}
-          className=" col-span-8 w-full grid grid-cols-8 gap-4"
+          className="col-span-8 w-full grid grid-cols-8 gap-4"
         >
           <div className="flex justify-center col-span-2 w-full">
             {/* region */}
@@ -73,25 +75,25 @@ export default function Nav({
               className="w-full bg-transparent border px-2 rounded-md"
               onChange={(e) => {
                 setRegion(e.target.value);
-              }}
-            >
-              <option value="" selected>
+                }}
+              >
+                <option value="" selected>
                 Select region
-              </option>
-              <option value="br1">BR</option>
-              <option value="eun1">EUNE</option>
-              <option value="euw1">EUW</option>
-              <option value="jp1">JP</option>
-              <option value="kr">KR</option>
-              <option value="la1">LAN</option>
-              <option value="la2">LAS</option>
-              <option value="na1">NA</option>
-              <option value="oc1">OCE</option>
-              <option value="tr1">TR</option>
-              <option value="ru">RU</option>
-            </select>
-          </div>
-          <div className="col-span-6 flex gap-2 w-full">
+                </option>
+                <option value="br1">BR</option>
+                <option value="eun1">EUNE</option>
+                <option value="euw1">EUW</option>
+                <option value="jp1">JP</option>
+                <option value="kr">KR</option>
+                <option value="la1">LAN</option>
+                <option value="la2">LAS</option>
+                <option value="na1">NA</option>
+                <option value="oc1">OCE</option>
+                <option value="tr1">TR</option>
+                <option value="ru">RU</option>
+              </select>
+          </div> 
+          <div className="col-span-6 flex gap-x-2 w-full h-full">
             <Input
               onChange={(e) => {
                 setQuery(e.target.value);
@@ -105,9 +107,8 @@ export default function Nav({
             />
           </div>
         </form>
-        <div className="flex justify-center col-span-2">{/* Language */}</div>
-        <div className="flex justify-center col-span-2">{/* Burgir */}</div>
-      </div>
+        <div className="flex justify-center col-span-2 sm:hidden">{/* Burgir */}</div>
+      </div>      
     </nav>
   );
 }
