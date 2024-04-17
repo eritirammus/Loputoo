@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RiotController extends Controller
 {
-    public function getData($region, $gameName , $tagLine)
+    public function getData($platform, $region, $gameName, $tagLine)
     {
         $data = null;
         $filename = 'api_data.json';
@@ -30,37 +30,42 @@ class RiotController extends Controller
 
         $response = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
-        ])->get('https://' . 'europe' . '.api.riotgames.com/riot/account/v1/accounts/by-riot-id/' . $gameName . '/' . $tagLine);
-
+        ])->get('https://' . $platform . '.api.riotgames.com/riot/account/v1/accounts/by-riot-id/' . $gameName . '/' . $tagLine);
+        Log::info($response);
         if ($response->successful()) {
-
+        
             $response2 = Http::withHeaders([
                 'X-Riot-Token' => env('VITE_LOL_API_KEY')
             ])->get('https://' . $region . '.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/' . $response['puuid']);
-                Log::info($response2);
+            Log::info($response2);
 
             if ($response2->successful()) {
-                // return response()->json($response2->json());
 
                 $response3 = Http::withHeaders([
                     'X-Riot-Token' => env('VITE_LOL_API_KEY')
                 ])->get('https://' . $region . '.api.riotgames.com/lol/league/v4/entries/by-summoner/' . $response2['id']);
-                    Log::info($response3);
-            } else {
-                return response()->json(['error' => "Failed to fetch Riot api"]);
+                Log::info($response3);
             }
 
             return response()->json(['data1' => $response->json(), 'data2' => $response2->json(), 'data3' => $response3->json()]);
         } else {
             return response()->json(['error' => "Failed to fetch Riot api"]);
         }
-        
-        // return $data;
-        // return response()->json($summonerName);
     }
 
+    public function getMatchIds($puuid)
+    {
+        $platform = request()->get('platform');
+        $queueType = request()->get('queueType');
+        $response = Http::withHeaders([
+            'X-Riot-Token' => env('VITE_LOL_API_KEY')
+        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids' . "&count=5&type=" . $queueType); 
+        Log::info($response);
+
+        if ($response->successful()) {
+            return response()->json($response->json());
+        } else {
+            return response()->json(['error' => "Failed to fetch Riot api"]);
+        }
+    }
 }
-
-
-
-

@@ -7,7 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-Route::get('/lol/data/{region}/{gameName}/{tagLine}', [RiotController::class, 'getData']);
+Route::get('/lol/data/{platform}/{region}/{gameName}/{tagLine}', [RiotController::class, 'getData']);
+Route::get('/lol/match/v5/matches/by-puuid/{puuid}/ids', [RiotController::class, 'getMatchIds']);
 
 
 Route::get('/', function () {
