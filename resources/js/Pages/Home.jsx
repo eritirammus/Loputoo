@@ -17,74 +17,34 @@ export default function Home({ auth }) {
   const [apiData, setApiData] = useState();
   const [badgeColor, setBadgeColor] = useState("");
   const [region, setRegion] = useState("Select Region");
+  const [matchIds, setMatchIds] = useState("");
+  // const [matchData, setMatchData] = useState();
 
-  function getImageColorAndInvert(url) {
-    const img = new Image();
-    img.crossOrigin = "Anonymous"; // To avoid CORS issue
-    img.onload = function () {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-
-      canvas.width = img.width;
-      canvas.height = img.height;
-
-      // Draw image onto canvas
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-
-      // Get image data
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const { data } = imageData;
-
-      // Calculate main color (average)
-      let totalR = 0,
-        totalG = 0,
-        totalB = 0;
-      for (let i = 0; i < data.length; i += 4) {
-        totalR += data[i];
-        totalG += data[i + 1];
-        totalB += data[i + 2];
-      }
-      const avgR = Math.round(totalR / (data.length / 4));
-      const avgG = Math.round(totalG / (data.length / 4));
-      const avgB = Math.round(totalB / (data.length / 4));
-      const mainColor = rgbaColor(avgR, avgG, avgB, 0.3); // Adjust opacity here (0.5 for 50% opacity)
-
-      // Invert image data
-      for (let i = 0; i < data.length; i += 4) {
-        data[i] = 255 - data[i]; // Red
-        data[i + 1] = 255 - data[i + 1]; // Green
-        data[i + 2] = 255 - data[i + 2]; // Blue
-      }
-
-      // Put inverted image data back to canvas
-      ctx.putImageData(imageData, 0, 0);
-
-      // Display original and inverted images
-      const originalImage = new Image();
-      originalImage.src = url;
-      document.body.appendChild(originalImage);
-
-      const invertedImage = new Image();
-      invertedImage.src = canvas.toDataURL();
-      document.body.appendChild(invertedImage);
-
-      // Return main color as rgba
-      console.log("Main color (rgba):", mainColor);
-    };
-    img.src = url;
+  function fetchMatchIds(
+    queueType = "queueType",
+    puuid = apiData?.data1.puuid
+  ) {
+    axios
+      .get(`/api/lol/match/v5/matches/by-puuid/${puuid}/ids`, {
+        params: {
+          queueType: queueType,
+          platform: platform,
+        },
+      })
+      .then((response) => {
+        setMatchIds(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   }
-
-  function componentToHex(c) {
-    const hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-  }
-
-  function rgbaColor(r, g, b, a) {
-    const value = `rgba(${r}, ${g}, ${b}, ${a})`;
-
-    setBadgeColor(value);
-    return `rgba(${r}, ${g}, ${b}, ${a})`;
-  }
+  useEffect(() => {
+    if (apiData) {
+      fetchMatchIds("ranked");
+    }
+    console.log(apiData);
+  }, []);
 
   return (
     <AuthenticatedLayout
@@ -102,8 +62,8 @@ export default function Home({ auth }) {
         setTagline={setTagline}
         apiData={apiData}
         setApiData={setApiData}
-        region={region}
-        setRegion={setRegion}
+        // fetchMatchData={fetchMatchData}
+        fetchMatchIds={fetchMatchIds}
       />
 
       <div>
@@ -144,6 +104,23 @@ export default function Home({ auth }) {
                 <h1 className="text-xl font-bold text-white">
                   {`${gameName}#${tagline}`}
                 </h1>
+                <div className="p-5">
+                  <select
+                    name="queueType"
+                    id="queueType"
+                    className="w-full bg-transparent border px-2 rounded-md"
+                    onChange={(e) => {
+                      const selectedQueueType = e.target.value;
+                      fetchMatchId(selectedQueueType);
+                    }}
+                  >
+                    <option value="">All gamemodes</option>
+                    <option value="ranked">Ranked</option>
+                    <option value="normal">Normal</option>
+                    <option value="tourney">Tourney</option>
+                    <option value="tutorial">Tutorial</option>
+                  </select>
+                </div>
 
                 {apiData?.data3?.map((data) => (
                   <div className="w-full p-5" key={data.id}>
@@ -166,30 +143,28 @@ export default function Home({ auth }) {
                 ))}
               </div>
             </div>
-            <div className="h-auto w-full overflow-hidden shadow-sm  col-span-3 grid grid-cols-1 gap-4">
-              <div className="p-7 text-textPurple bg-[#1A1A22] sm:rounded-xl">
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="bg-[#1A1A22] sm:rounded-xl">
-                    <div className="flex justify-between items-center">
-                      <h2 className="text-lg font-bold text-textPurple">
-                        Recent Matches
-                      </h2>
-                      <Button variant="primary">View All</Button>
-
-                      <div className="flex items-center">
-                        
-                      </div>
-                    </div>
-                    <div className="absolute w-790 h-90 left-30 top-30 bg-[#16161C] rounded-20">
-                      <div className="grid grid-cols-1 gap-4">
-                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
-                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
-                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
-                        <div className="bg-[#1A1A22] sm:rounded-xl"></div>
-                      </div>
-                    </div>
-                  </div>
+            <div className="h-auto w-full bg-[#1A1A22] rounded-md overflow-hidden shadow-sm col-span-3 grid grid-cols-1 gap-4">
+              <div className="p-4">
+                <div className="flex justify-between">
+                  <h2 className="font-bold text-textPurple text-xl">
+                    Recent Matches
+                  </h2>
+                  <Button
+                    className="font-semibold text-textPurple text-lg"
+                    variant="primary"
+                  >
+                    View All
+                  </Button>
                 </div>
+                {matchIds &&
+                  matchIds?.map((matchId) => (
+                    <div
+                      className="bg-bgBlue sm:rounded-xl p-4 text-textPurple"
+                      key={matchId}
+                    >
+                      <h1 className="text-lg">{matchId}</h1>
+                    </div>
+                  ))}
               </div>
               <div className="p-7 text-textPurple bg-[#1A1A22] sm:rounded-xl"></div>
             </div>

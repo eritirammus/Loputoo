@@ -54,11 +54,23 @@ class RiotController extends Controller
         } else {
             return response()->json(['error' => "Failed to fetch Riot api"]);
         }
-        
-        // return $data;
-        // return response()->json($summonerName);
     }
 
+    public function getMatchIds($puuid)
+    {
+        $platform = request()->get('platform');
+        $queueType = request()->get('queueType');
+        $response = Http::withHeaders([
+            'X-Riot-Token' => env('VITE_LOL_API_KEY')
+        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids' . "&count=5&type=" . $queueType); 
+        Log::info($response);
+
+        if ($response->successful()) {
+            return response()->json($response->json());
+        } else {
+            return response()->json(['error' => "Failed to fetch Riot api"]);
+        }
+    }
 }
 
 

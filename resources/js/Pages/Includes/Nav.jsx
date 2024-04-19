@@ -26,7 +26,7 @@ export default function Nav({
       console.log(value[0]);
       setTagline(value[1]);
       console.log(value[1]);
-
+      
       axios
         .get(`/api/lol/data/${region}/${value[0]}/${value[1]}`, {
           headers: {
@@ -37,6 +37,7 @@ export default function Nav({
         })
         .then((response) => {
           setApiData(response.data);
+          fetchMatchData("", response?.data1?.puuid);
           console.log(apiData);
           if (response?.data.puuid) {
             localStorage.setItem("puuid", response.data.puuid);
