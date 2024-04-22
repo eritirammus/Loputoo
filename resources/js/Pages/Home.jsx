@@ -19,7 +19,7 @@ export default function Home({ auth }) {
   const [badgeColor, setBadgeColor] = useState("");
   const [platform, setPlatform] = useState("");
   const [region, setRegion] = useState("Select Region");
-  const [matchIds, setMatchIds] = useState("");
+  const [MatchIds, setMatchIds] = useState([]);
   // const [matchData, setMatchData] = useState();
 
   function fetchMatchIds(
@@ -122,7 +122,7 @@ export default function Home({ auth }) {
                     className="w-full bg-transparent border px-2 rounded-md"
                     onChange={(e) => {
                       const selectedQueueType = e.target.value;
-                      fetchMatchId(selectedQueueType);
+                      fetchMatchIds(selectedQueueType);
                     }}
                   >
                     <option value="">All gamemodes</option>
@@ -141,6 +141,7 @@ export default function Home({ auth }) {
                           " " +
                           data.queueType.split("_")[1]}
                       </h1>
+                      
                       <h1 className="text-lg font-semibold">
                         {data.tier} {data.rank} {}
                         {data.leaguePoints}LP
@@ -157,7 +158,7 @@ export default function Home({ auth }) {
               </div>
             </div>
             <div className="h-auto w-full bg-[#1A1A22] rounded-md overflow-hidden shadow-sm col-span-3 grid grid-cols-1 gap-4">
-              <div className="p-4">
+              <div className="p-4 flex flex-col gap-2">
                 <div className="flex justify-between">
                   <h2 className="font-bold text-textPurple text-xl">
                     Recent Matches
@@ -169,8 +170,9 @@ export default function Home({ auth }) {
                     View All
                   </Button>
                 </div>
-                {matchIds &&
-                  matchIds?.map((matchId) => (
+                {console.log(MatchIds)}
+                {MatchIds &&
+                  MatchIds?.map((matchId) => (
                     <div
                       className="bg-bgBlue sm:rounded-xl p-4 text-textPurple"
                       key={matchId}
@@ -193,3 +195,4 @@ export default function Home({ auth }) {
     </AuthenticatedLayout>
   );
 }
+
