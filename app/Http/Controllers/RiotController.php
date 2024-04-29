@@ -64,7 +64,20 @@ class RiotController extends Controller
         Log::info($response);
 
         if ($response->successful()) {
-            return response()->json($response->json());
+            $matchDatas = [];
+
+            foreach ($response->json() as $matchId) {
+                $response2 = Http::withHeaders([
+                    'X-Riot-Token' => env('VITE_LOL_API_KEY')
+                ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/' . $matchId);
+                Log::info($response2);
+                if ($response2->successful()) {
+                    $matchDatas[] = $response2->json();
+                } else {
+                    return response()->json(['error' => "Failed to fetch Riot api on match datas"]);
+                }
+            }
+            return response()->json(['data1' => $response->json(), 'data2' => $matchDatas]);
         } else {
             return response()->json(['error' => "Failed to fetch Riot api"]);
         }

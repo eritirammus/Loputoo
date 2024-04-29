@@ -55,20 +55,21 @@ export default function Nav({
 
   return (
     <nav>
-      <div className="grid grid-cols-12 gap-x-4 px-7 pt-5 items-center">
-        <div className="flex justify-start col-span-1">
+      <div className="h-full grid grid-cols-4 gap-x-2 sm:grid-cols-10 p-4 sm:px-7 sm:pt-5 items-center">
+        <div className="flex justify-start sm:justify-center col-span-1">
           <Link href="/">
             <ApplicationLogo />
           </Link>
         </div>
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSearch();
           }}
-          className="h-3/4 col-span-8 w-full grid grid-cols-8 gap-4"
+          className="h-full col-span-9 flex gap-2 sm:grid grid-cols-6"
         >
-          <div className="flex justify-center col-span-2 w-full">
+          <div className="bg-gray-700 w-full md:col-span-2 col-span-">
             <select
               name="platform"
               id="platform"
@@ -85,7 +86,6 @@ export default function Nav({
               <option value="europe">Europe</option>
               <option value="sea">SEA</option>
             </select>
-
             <select
               name="region"
               id="region"
@@ -131,15 +131,20 @@ export default function Nav({
               )}
             </select>
           </div>
-          <div className="col-span-6 flex gap-x-2 w-full h-full">
+
+          <div className="col-span-4  flex w-full gap-x-2 h-full">
             <Input
               onChange={(e) => {
                 setQuery(e.target.value);
               }}
               className="h-full w-full"
             />
-            <button type="submit" value="search" className="h-full">
-              <Search size={36}/>
+            <button
+              type="submit"
+              value="search"
+              className="h-full flex justify-center items-center"
+            >
+              <Search size={28} />
             </button>
           </div>
         </form>
@@ -147,3 +152,5 @@ export default function Nav({
     </nav>
   );
 }
+
+export { Nav };

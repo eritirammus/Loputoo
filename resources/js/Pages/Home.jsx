@@ -1,12 +1,12 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import Nav from "@/Pages/Includes/Nav";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { Badge } from "@/Components/ui/badge";
 import { Progress } from "@/Components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
-import Nav from "@/Pages/Includes/Nav";
 import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import axios from "axios";
@@ -20,7 +20,6 @@ export default function Home({ auth }) {
   const [platform, setPlatform] = useState("");
   const [region, setRegion] = useState("Select Region");
   const [MatchIds, setMatchIds] = useState([]);
-  // const [matchData, setMatchData] = useState();
 
   function fetchMatchIds(
     queueType = "queueType",
@@ -41,6 +40,22 @@ export default function Home({ auth }) {
         console.log("Error:", error);
       });
   }
+
+  function fetchMatchData(matchId) {
+    axios
+      .get(`/api/lol/match/v5/matches/${matchId}`, {
+        params: {
+          platform: platform,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }
+
   useEffect(() => {
     if (apiData) {
       fetchMatchIds("ranked");
@@ -68,7 +83,7 @@ export default function Home({ auth }) {
         setTagline={setTagline}
         apiData={apiData}
         setApiData={setApiData}
-        // fetchMatchData={fetchMatchData}
+        fetchMatchData={fetchMatchData}
         fetchMatchIds={fetchMatchIds}
       />
 
@@ -77,7 +92,7 @@ export default function Home({ auth }) {
           <div
             className={
               apiData && !apiData?.error
-                ? "grid grid-cols-4 w-full gap-4"
+                ? "grid grid-cols-1 sm:grid-cols-4 w-full gap-4"
                 : "hidden"
             }
           >
@@ -88,7 +103,7 @@ export default function Home({ auth }) {
                     {apiData && apiData.data2 ? (
                       <AvatarImage
                         src={
-                          "http://ddragon.leagueoflegends.com/cdn/11.8.1/img/profileicon/" +
+                          "/profileicon/" +
                           apiData.data2.profileIconId +
                           ".png"
                         }
@@ -157,7 +172,7 @@ export default function Home({ auth }) {
                 ))}
               </div>
             </div>
-            <div className="h-auto w-full bg-[#1A1A22] rounded-md overflow-hidden shadow-sm col-span-3 grid grid-cols-1 gap-4">
+            <div className="h-fit w-full bg-[#1A1A22] rounded-md overflow-hidden shadow-sm col-span-3 grid grid-cols-1 gap-4">
               <div className="p-4 flex flex-col gap-2">
                 <div className="flex justify-between">
                   <h2 className="font-bold text-textPurple text-xl">
@@ -170,14 +185,13 @@ export default function Home({ auth }) {
                     View All
                   </Button>
                 </div>
-                {console.log(MatchIds)}
                 {MatchIds &&
-                  MatchIds?.map((matchId) => (
+                  MatchIds.data2?.map((data) => (
                     <div
                       className="bg-bgBlue sm:rounded-xl p-4 text-textPurple"
-                      key={matchId}
+                      key={data}
                     >
-                      <h1 className="text-lg">{matchId}</h1>
+                      <h1 className="text-lg">{data.info.gameMode}</h1>
                     </div>
                   ))}
               </div>
