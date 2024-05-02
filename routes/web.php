@@ -9,4 +9,8 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
+Route::get('/Tierlist', function () {
+    return Inertia::render('Tierlist');
+})->name('tierlist');
+
 require __DIR__.'/auth.php';

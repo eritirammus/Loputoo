@@ -64,10 +64,7 @@ export default function Home({ auth }) {
   }, []);
 
   return (
-    <AuthenticatedLayout
-      user={auth.user}
-      // header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dashboard</h2>}
-    >
+    <AuthenticatedLayout>
       <Head title="Dashboard" />
 
       <Nav
@@ -88,7 +85,7 @@ export default function Home({ auth }) {
       />
 
       <div>
-        <div className="sm:p-6 lg:p-7 ">
+        <div className="p-4 sm:p-6 lg:p-7 ">
           <div
             className={
               apiData && !apiData?.error
@@ -96,7 +93,7 @@ export default function Home({ auth }) {
                 : "hidden"
             }
           >
-            <div className="bg-[#1A1A22] h-auto w-full overflow-hidden shadow-sm sm:rounded-xl col-span-1 flex flex-col">
+            <div className="bg-[#1A1A22] h-auto w-full overflow-hidden shadow-sm rounded-xl col-span-1 flex flex-col">
               <div className="p-7 text-textPurple">
                 <div className="w-full flex flex-col items-center justify-center relative">
                   <Avatar>

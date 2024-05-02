@@ -55,31 +55,38 @@ export default function Nav({
 
   return (
     <nav>
-      <div className="h-full grid grid-cols-4 gap-x-2 sm:grid-cols-10 p-4 sm:px-7 sm:pt-5 items-center">
-        <div className="flex justify-start sm:justify-center col-span-1">
-          <Link href="/">
-            <ApplicationLogo />
+      <div>
+        <div className="grid grid-cols-4 sm:grid-cols-4 p-4 sm:px-7 items-center font-bold">
+          <div className="justify-start col-span-1">
+            <Link href="/">
+              <ApplicationLogo />
+            </Link>
+          </div>
+          <Link href="/Tierlist">
+            <button className="col-span-1">Tierlist</button>
           </Link>
         </div>
-
+      </div>
+      <div className="p-4 sm:px-7">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSearch();
           }}
-          className="h-full col-span-9 flex gap-2 sm:grid grid-cols-6"
+          className="grid grid-cols-8 grid-rows-2 rounded-2xl gap-y-4"
+          
         >
-          <div className="bg-gray-700 w-full md:col-span-2 col-span-">
+          <div className="grid grid-cols-2 row-start-1 col-span-8 gap-x-4">
             <select
               name="platform"
               id="platform"
-              className="w-full bg-transparent border px-2 rounded-2xl"
+              className="bg-compBlue p-4 rounded-xl h-full w-full col-span-1"
               onChange={(e) => {
                 setPlatform(e.target.value);
               }}
             >
               <option value="" selected>
-                Select platform
+                <div className="">Select platform</div>
               </option>
               <option value="americas">Americas</option>
               <option value="asia">Asia</option>
@@ -89,7 +96,7 @@ export default function Nav({
             <select
               name="region"
               id="region"
-              className="w-full bg-transparent border px-2 rounded-2xl"
+              className="bg-compBlue p-4 rounded-xl h-full col-span-1 w-full"
               onChange={(e) => {
                 setRegion(e.target.value);
               }}
@@ -97,7 +104,7 @@ export default function Nav({
               {platform === "" && (
                 <>
                   <option value="" selected>
-                    Select region
+                    Region
                   </option>
                 </>
               )}
@@ -132,12 +139,12 @@ export default function Nav({
             </select>
           </div>
 
-          <div className="col-span-4  flex w-full gap-x-2 h-full">
+          <div className="row-start-2 col-span-8 flex items-center">
             <Input
               onChange={(e) => {
                 setQuery(e.target.value);
               }}
-              className="h-full w-full"
+              className="w-full border-none bg-compBlue rounded-xl p-4"
             />
             <button
               type="submit"
