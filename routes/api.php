@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+
 Route::get('/lol/data/{platform}/{region}/{gameName}/{tagLine}', [RiotController::class, 'getData']);
 Route::get('/lol/match/v5/matches/by-puuid/{puuid}/ids', [RiotController::class, 'getMatchIds']);
 
@@ -19,7 +20,7 @@ Route::get('/', function () {
         return response()->json(json_decode(file_get_contents('cache.json')));
     } else {
         // make an API request and store its data to cache.json
-        $response = Http::get('https://mannicoon.com/api/cats');
+        $response = Http::get('');
         $data = $response->json();
         $cache = [
             'last_updated' => time(),

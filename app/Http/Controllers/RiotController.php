@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RiotController extends Controller
 {
-    public function getData($platform, $region, $gameName, $tagLine)
+    public function getData($platform, $region, $gameName, $tagLine) 
     {
         $data = null;
         $filename = 'api_data.json';
@@ -33,7 +33,7 @@ class RiotController extends Controller
         ])->get('https://' . $platform . '.api.riotgames.com/riot/account/v1/accounts/by-riot-id/' . $gameName . '/' . $tagLine);
         Log::info($response);
         if ($response->successful()) {
-        
+
             $response2 = Http::withHeaders([
                 'X-Riot-Token' => env('VITE_LOL_API_KEY')
             ])->get('https://' . $region . '.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/' . $response['puuid']);
@@ -59,8 +59,7 @@ class RiotController extends Controller
         $queueType = request()->get('queueType');
         $response = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
-        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids?' . "count=5&type=" . $queueType); 
-        // ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids' . "&count=5&type=" . $queueType); 
+        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids?' . "count=5&type=" . $queueType);
         Log::info($response);
 
         if ($response->successful()) {

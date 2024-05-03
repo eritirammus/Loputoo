@@ -20,6 +20,7 @@ export default function Home({ auth }) {
   const [platform, setPlatform] = useState("");
   const [region, setRegion] = useState("Select Region");
   const [MatchIds, setMatchIds] = useState([]);
+  
 
   function fetchMatchIds(
     queueType = "queueType",
@@ -41,7 +42,7 @@ export default function Home({ auth }) {
       });
   }
 
-  function fetchMatchData(matchId) {
+  function fetchMatchData(matchId, ) {
     axios
       .get(`/api/lol/match/v5/matches/${matchId}`, {
         params: {
@@ -189,6 +190,10 @@ export default function Home({ auth }) {
                       key={data}
                     >
                       <h1 className="text-lg">{data.info.gameMode}</h1>
+                      <h1 className="text-lg">{data.info.gameDuration}</h1>
+                      <h1 className="text-lg">{data.info.participants.kills}</h1>
+                      {console.log(data.info.participants)}
+
                     </div>
                   ))}
               </div>

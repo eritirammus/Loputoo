@@ -74,7 +74,6 @@ export default function Nav({
             handleSearch();
           }}
           className="grid grid-cols-8 grid-rows-2 rounded-2xl gap-y-4"
-          
         >
           <div className="grid grid-cols-2 row-start-1 col-span-8 gap-x-4">
             <select
@@ -96,7 +95,7 @@ export default function Nav({
             <select
               name="region"
               id="region"
-              className="bg-compBlue p-4 rounded-xl h-full col-span-1 w-full"
+              className="bg-compBlue flex p- rounded-xl h-full col-span-1 w-full"
               onChange={(e) => {
                 setRegion(e.target.value);
               }}
@@ -139,12 +138,15 @@ export default function Nav({
             </select>
           </div>
 
-          <div className="row-start-2 col-span-8 flex items-center">
+          <div className="row-start-2 col-span-8 gap-x-4 flex items-center">
             <Input
               onChange={(e) => {
                 setQuery(e.target.value);
               }}
               className="w-full border-none bg-compBlue rounded-xl p-4"
+              onTouchStart={(e) => {
+                e.preventDefault();
+              }}
             />
             <button
               type="submit"
