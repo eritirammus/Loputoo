@@ -20,7 +20,6 @@ export default function Home({ auth }) {
   const [platform, setPlatform] = useState("");
   const [region, setRegion] = useState("Select Region");
   const [MatchIds, setMatchIds] = useState([]);
-  
 
   function fetchMatchIds(
     queueType = "queueType",
@@ -42,7 +41,7 @@ export default function Home({ auth }) {
       });
   }
 
-  function fetchMatchData(matchId, ) {
+  function fetchMatchData(matchId) {
     axios
       .get(`/api/lol/match/v5/matches/${matchId}`, {
         params: {
@@ -101,9 +100,7 @@ export default function Home({ auth }) {
                     {apiData && apiData.data2 ? (
                       <AvatarImage
                         src={
-                          "/profileicon/" +
-                          apiData.data2.profileIconId +
-                          ".png"
+                          "/profileicon/" + apiData.data2.profileIconId + ".png"
                         }
                       />
                     ) : (
@@ -154,7 +151,7 @@ export default function Home({ auth }) {
                           " " +
                           data.queueType.split("_")[1]}
                       </h1>
-                      
+
                       <h1 className="text-lg font-semibold">
                         {data.tier} {data.rank} {}
                         {data.leaguePoints}LP
@@ -184,18 +181,30 @@ export default function Home({ auth }) {
                   </Button>
                 </div>
                 {MatchIds &&
-                  MatchIds.data2?.map((data) => (
-                    <div
-                      className="bg-bgBlue sm:rounded-xl p-4 text-textPurple"
-                      key={data}
-                    >
-                      <h1 className="text-lg">{data.info.gameMode}</h1>
-                      <h1 className="text-lg">{data.info.gameDuration}</h1>
-                      <h1 className="text-lg">{data.info.participants.kills}</h1>
-                      {console.log(data.info.participants)}
+                  MatchIds.data2?.map((data) => {
+                    const gameMode = data.info.gameMode === 'CLASSIC' ? 'Draft' : data.info.gameMode === 'CHERRY' ? 'Arena' : data.info.gameMode;
 
-                    </div>
-                  ))}
+                    // Convert gameDuration to hours, minutes and seconds
+                    const hours = Math.floor(data.info.gameDuration / 3600);
+                    const minutes = Math.floor((data.info.gameDuration % 3600) / 60);
+                    const seconds = data.info.gameDuration % 60;
+
+                    return (
+                      <div className="bg-bgBlue sm:rounded-xl p-4 text-textPurple" key={data}>
+                        <h1 className="text-lg">{gameMode}</h1>
+                        {hours > 0 && (
+                          <h1 className="text-lg">
+                            {hours}h {minutes}m {seconds}s
+                          </h1>
+                        )}
+                        {hours === 0 && (
+                          <h1 className="text-lg">
+                            {minutes}m {seconds}s
+                          </h1>
+                        )}
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -211,4 +220,3 @@ export default function Home({ auth }) {
     </AuthenticatedLayout>
   );
 }
-

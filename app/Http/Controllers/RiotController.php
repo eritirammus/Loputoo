@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RiotController extends Controller
 {
-    public function getData($platform, $region, $gameName, $tagLine) 
+    public function getData($platform, $region, $gameName, $tagLine)
     {
         $data = null;
         $filename = 'api_data.json';
@@ -28,26 +28,23 @@ class RiotController extends Controller
         // }
         // Fetch new data from the API
 
-        $response = Http::withHeaders([
+        $accountData = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
         ])->get('https://' . $platform . '.api.riotgames.com/riot/account/v1/accounts/by-riot-id/' . $gameName . '/' . $tagLine);
-        Log::info($response);
-        if ($response->successful()) {
+        Log::info($accountData);
+        if ($accountData->successful()) {
 
-            $response2 = Http::withHeaders([
+            $summonerData = Http::withHeaders([
                 'X-Riot-Token' => env('VITE_LOL_API_KEY')
-            ])->get('https://' . $region . '.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/' . $response['puuid']);
-            Log::info($response2);
+            ])->get('https://' . $region . '.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/' . $accountData['puuid']);
+            Log::info($summonerData);
 
-            if ($response2->successful()) {
+            $leagueEntriesData = Http::withHeaders([
+                'X-Riot-Token' => env('VITE_LOL_API_KEY')
+            ])->get('https://' . $region . '.api.riotgames.com/lol/league/v4/entries/by-summoner/' . $summonerData['id']);
+            Log::info($leagueEntriesData);
 
-                $response3 = Http::withHeaders([
-                    'X-Riot-Token' => env('VITE_LOL_API_KEY')
-                ])->get('https://' . $region . '.api.riotgames.com/lol/league/v4/entries/by-summoner/' . $response2['id']);
-                Log::info($response3);
-            }
-
-            return response()->json(['data1' => $response->json(), 'data2' => $response2->json(), 'data3' => $response3->json()]);
+            return response()->json(['data1' => $accountData->json(), 'data2' => $summonerData->json(), 'data3' => $leagueEntriesData->json()]);
         } else {
             return response()->json(['error' => "Failed to fetch Riot api"]);
         }
