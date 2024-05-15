@@ -42,7 +42,7 @@ export default function Nav({
         })
         .then((response) => {
           setApiData(response.data);
-          fetchMatchData("", response.data1.puuid);
+          fetchMatchData("", response.data1?.puuid);
           console.log(apiData);
         })
         .catch((error) => {

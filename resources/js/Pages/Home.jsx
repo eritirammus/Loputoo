@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function Home({ auth }) {
   const [query, setQuery] = useState("");
@@ -21,11 +22,13 @@ export default function Home({ auth }) {
   const [region, setRegion] = useState("Select Region");
   const [MatchIds, setMatchIds] = useState([]);
 
+  let promise = null;
+
   function fetchMatchIds(
     queueType = "queueType",
     puuid = apiData?.data1.puuid
   ) {
-    axios
+    promise = axios
       .get(`/api/lol/match/v5/matches/by-puuid/${puuid}/ids`, {
         params: {
           queueType: queueType,
@@ -39,8 +42,17 @@ export default function Home({ auth }) {
       .catch((error) => {
         console.log("Error:", error);
       });
-  }
 
+    toast.promise(promise, {
+      loading: "Loading match datas",
+      success: (data) => {
+        return `Data loaded successfully`;
+      },
+      error: "Error loading match data",
+    });
+  }
+  const [matchData, setMatchData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   function fetchMatchData(matchId) {
     axios
       .get(`/api/lol/match/v5/matches/${matchId}`, {
@@ -182,15 +194,25 @@ export default function Home({ auth }) {
                 </div>
                 {MatchIds &&
                   MatchIds.data2?.map((data) => {
-                    const gameMode = data.info.gameMode === 'CLASSIC' ? 'Draft' : data.info.gameMode === 'CHERRY' ? 'Arena' : data.info.gameMode;
+                    const gameMode =
+                      data.info.gameMode === "CLASSIC"
+                        ? "Draft"
+                        : data.info.gameMode === "CHERRY"
+                        ? "Arena"
+                        : data.info.gameMode;
 
                     // Convert gameDuration to hours, minutes and seconds
                     const hours = Math.floor(data.info.gameDuration / 3600);
-                    const minutes = Math.floor((data.info.gameDuration % 3600) / 60);
+                    const minutes = Math.floor(
+                      (data.info.gameDuration % 3600) / 60
+                    );
                     const seconds = data.info.gameDuration % 60;
 
                     return (
-                      <div className="bg-bgBlue sm:rounded-xl p-4 text-textPurple" key={data}>
+                      <div
+                        className="bg-bgBlue sm:rounded-xl p-4 text-textPurple"
+                        key={data}
+                      >
                         <h1 className="text-lg">{gameMode}</h1>
                         {hours > 0 && (
                           <h1 className="text-lg">
