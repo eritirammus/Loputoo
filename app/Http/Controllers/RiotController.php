@@ -54,28 +54,24 @@ class RiotController extends Controller
     {
         $platform = request()->get('platform');
         $queueType = request()->get('queueType');
-        $response = Http::withHeaders([
+        $matchIds = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
         ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids?' . "count=5&type=" . $queueType);
-        Log::info($response);
+        Log::info($matchIds);
 
-        if ($response->successful()) {
-            $matchDatas = [];
+        $matchDatas = [];
 
-            foreach ($response->json() as $matchId) {
-                $response2 = Http::withHeaders([
-                    'X-Riot-Token' => env('VITE_LOL_API_KEY')
-                ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/' . $matchId);
-                Log::info($response2);
-                if ($response2->successful()) {
-                    $matchDatas[] = $response2->json();
-                } else {
-                    return response()->json(['error' => "Failed to fetch Riot api on match datas"]);
-                }
+        foreach ($matchIds->json() as $matchId) {
+            $response = Http::withHeaders([
+                'X-Riot-Token' => env('VITE_LOL_API_KEY')
+            ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/' . $matchId);
+            Log::info($response);
+            if ($response->successful()) {
+                $matchDatas[] = $response->json();
+            } else {
+                return response()->json(['error' => "Failed to fetch Riot api on match datas"]);
             }
-            return response()->json(['data1' => $response->json(), 'data2' => $matchDatas]);
-        } else {
-            return response()->json(['error' => "Failed to fetch Riot api"]);
         }
+        return response()->json(['data1' => $matchIds->json(), 'data2' => $matchDatas]);
     }
 }
