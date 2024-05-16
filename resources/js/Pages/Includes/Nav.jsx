@@ -85,7 +85,7 @@ export default function Nav({
               }}
             >
               <option value="" selected>
-                <div className="">Select platform</div>
+                <div className="bg-compBlue">Select platform</div>
               </option>
               <option value="americas">Americas</option>
               <option value="asia">Asia</option>

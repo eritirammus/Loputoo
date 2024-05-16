@@ -27,15 +27,26 @@ export default function Home({ auth }) {
   function switchranktype(rank) {
     switch (rank) {
       case "IRON":
-        return "Iron";
-      case "IRON":
-        return "Iron";
-      case "IRON":
-        return "Iron";
-      case "IRON":
-        return "Iron";
+        return <Badge color="gray">Iron</Badge>;
+      case "BRONZE":
+        return <Badge color="brown">Bronze</Badge>;
+      case "SILVER":
+        return <Badge color="gray">Silver</Badge>;
+      case "GOLD":
+        return <Badge color="yellow">Gold</Badge>;
+      case "PLATINUM":
+        return <Badge color="teal">Platinum</Badge>;
+      case "DIAMOND":
+        return <Badge color="blue">Diamond</Badge>;
+      case "MASTER":
+        return <Badge color="purple">Master</Badge>;
+      case "GRANDMASTER":
+        return <Badge color="red">Grandmaster</Badge>;
+      case "CHALLENGER":
+        return <Badge color="orange">Challenger</Badge>;
       default:
-        return "Unranked";
+        return;
+        <Badge color="gray">Default</Badge>;
     }
   }
   function fetchMatchIds(
@@ -151,23 +162,6 @@ export default function Home({ auth }) {
                 <h1 className="text-xl font-bold text-white">
                   {`${gameName}#${tagline}`}
                 </h1>
-                <div className="p-5">
-                  <select
-                    name="queueType"
-                    id="queueType"
-                    className="w-full bg-transparent border px-2 rounded-md"
-                    onChange={(e) => {
-                      const selectedQueueType = e.target.value;
-                      fetchMatchIds(selectedQueueType);
-                    }}
-                  >
-                    <option value="">All gamemodes</option>
-                    <option value="ranked">Ranked</option>
-                    <option value="normal">Normal</option>
-                    <option value="tourney">Tourney</option>
-                    <option value="tutorial">Tutorial</option>
-                  </select>
-                </div>
 
                 {apiData?.data3?.map((data) => (
                   <div className="w-full p-5" key={data.id}>
@@ -181,8 +175,6 @@ export default function Home({ auth }) {
                         {data.tier} {data.rank}
                         {data.leaguePoints}LP
                       </h1>
-                      if (data.tier === "UNRANKED"){" "}
-                      {<h1 className="text-lg">Unranked</h1>}
                     </div>
                     <div className="">
                       <h2>
@@ -197,6 +189,23 @@ export default function Home({ auth }) {
             <div className="h-fit w-full bg-[#1A1A22] rounded-md overflow-hidden shadow-sm col-span-3 grid grid-cols-1 gap-4">
               <div className="p-4 flex flex-col gap-2">
                 <div className="flex justify-between">
+                  <div className="p-5">
+                    <select
+                      name="queueType"
+                      id="queueType"
+                      className="w-full bg-transparent border px-2 rounded-md"
+                      onChange={(e) => {
+                        const selectedQueueType = e.target.value;
+                        fetchMatchIds(selectedQueueType);
+                      }}
+                    >
+                      <option value="">All gamemodes</option>
+                      <option value="ranked">Ranked</option>
+                      <option value="normal">Normal</option>
+                      <option value="tourney">Tourney</option>
+                      <option value="tutorial">Tutorial</option>
+                    </select>
+                  </div>
                   <h2 className="font-bold text-textPurple text-xl">
                     Recent Matches
                   </h2>
