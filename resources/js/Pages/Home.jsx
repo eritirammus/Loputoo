@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import axios from "axios";
-import { toast } from "sonner";
+import { Toaster } from "sonner";
 
 export default function Home({ auth }) {
   const [query, setQuery] = useState("");
@@ -24,6 +24,20 @@ export default function Home({ auth }) {
 
   let promise = null;
 
+  function switchranktype(rank) {
+    switch (rank) {
+      case "IRON":
+        return "Iron";
+      case "IRON":
+        return "Iron";
+      case "IRON":
+        return "Iron";
+      case "IRON":
+        return "Iron";
+      default:
+        return "Unranked";
+    }
+  }
   function fetchMatchIds(
     queueType = "queueType",
     puuid = apiData?.data1.puuid
@@ -163,11 +177,12 @@ export default function Home({ auth }) {
                           " " +
                           data.queueType.split("_")[1]}
                       </h1>
-
                       <h1 className="text-lg font-semibold">
-                        {data.tier} {data.rank} {}
+                        {data.tier} {data.rank}
                         {data.leaguePoints}LP
                       </h1>
+                      if (data.tier === "UNRANKED"){" "}
+                      {<h1 className="text-lg">Unranked</h1>}
                     </div>
                     <div className="">
                       <h2>
