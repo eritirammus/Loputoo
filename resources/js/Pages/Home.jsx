@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import axios from "axios";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 
 export default function Home({ auth }) {
   const [query, setQuery] = useState("");
@@ -45,14 +45,10 @@ export default function Home({ auth }) {
       case "CHALLENGER":
         return <Badge color="orange">Challenger</Badge>;
       default:
-        return;
-        <Badge color="gray">Default</Badge>;
+        return <Badge color="gray">Default</Badge>;
     }
   }
-  function fetchMatchIds(
-    queueType = "queueType",
-    puuid = apiData?.data1.puuid
-  ) {
+  function fetchMatchIds(queueType = "", puuid = apiData?.data1.puuid) {
     promise = axios
       .get(`/api/lol/match/v5/matches/by-puuid/${puuid}/ids`, {
         params: {
@@ -95,7 +91,7 @@ export default function Home({ auth }) {
 
   useEffect(() => {
     if (apiData) {
-      fetchMatchIds("ranked");
+      fetchMatchIds("");
     }
     console.log(apiData);
   }, []);
@@ -130,7 +126,7 @@ export default function Home({ auth }) {
                 : "hidden"
             }
           >
-            <div className="bg-[#1A1A22] h-auto w-full overflow-hidden shadow-sm rounded-xl col-span-1 flex flex-col">
+            <div className="bg-[#1A1A22] h-fit w-full overflow-hidden shadow-sm rounded-xl col-span-1 flex flex-col">
               <div className="p-7 text-textPurple">
                 <div className="w-full flex flex-col items-center justify-center relative">
                   <Avatar>
@@ -186,26 +182,28 @@ export default function Home({ auth }) {
                 ))}
               </div>
             </div>
-            <div className="h-fit w-full bg-[#1A1A22] rounded-md overflow-hidden shadow-sm col-span-3 grid grid-cols-1 gap-4">
+            <div className="h-fit w-full bg-[#1A1A22] rounded-md overflow-hidden shadow-sm col-span-3 grid grid-cols-1">
+              <div className="px-5 pt-5">
+                <select
+                  name="queueType"
+                  id="queueType"
+                  className="w-full bg-transparent border px-2 rounded-md"
+                  onChange={(e) => {
+                    const selectedQueueType = e.target.value;
+                    fetchMatchIds(selectedQueueType);
+                  }}
+                >
+                  <option selected value="">
+                    All gamemodes
+                  </option>
+                  <option value="ranked">Ranked</option>
+                  <option value="normal">Normal</option>
+                  <option value="tourney">Tourney</option>
+                  <option value="tutorial">Tutorial</option>
+                </select>
+              </div>
               <div className="p-4 flex flex-col gap-2">
                 <div className="flex justify-between">
-                  <div className="p-5">
-                    <select
-                      name="queueType"
-                      id="queueType"
-                      className="w-full bg-transparent border px-2 rounded-md"
-                      onChange={(e) => {
-                        const selectedQueueType = e.target.value;
-                        fetchMatchIds(selectedQueueType);
-                      }}
-                    >
-                      <option value="">All gamemodes</option>
-                      <option value="ranked">Ranked</option>
-                      <option value="normal">Normal</option>
-                      <option value="tourney">Tourney</option>
-                      <option value="tutorial">Tutorial</option>
-                    </select>
-                  </div>
                   <h2 className="font-bold text-textPurple text-xl">
                     Recent Matches
                   </h2>

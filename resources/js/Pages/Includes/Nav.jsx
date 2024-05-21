@@ -23,6 +23,7 @@ export default function Nav({
   apiData,
   setApiData,
   fetchMatchData,
+  fetchMatchIds,
 }) {
   function handleSearch() {
     if (query && region) {
@@ -43,6 +44,7 @@ export default function Nav({
         .then((response) => {
           setApiData(response.data);
           fetchMatchData("", response.data1?.puuid);
+          fetchMatchIds("");
           console.log(apiData);
         })
         .catch((error) => {
@@ -85,7 +87,7 @@ export default function Nav({
               }}
             >
               <option value="" selected>
-                <div className="bg-compBlue">Select platform</div>
+                <div className="">Select platform</div>
               </option>
               <option value="americas">Americas</option>
               <option value="asia">Asia</option>
@@ -95,7 +97,7 @@ export default function Nav({
             <select
               name="region"
               id="region"
-              className="bg-compBlue flex p- rounded-xl h-full col-span-1 w-full"
+              className="bg-compBlue p-4 rounded-xl h-full w-full col-span-1"
               onChange={(e) => {
                 setRegion(e.target.value);
               }}
