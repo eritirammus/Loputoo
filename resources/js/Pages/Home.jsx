@@ -151,7 +151,7 @@ export default function Home({ auth }) {
                         ? apiData.data2.summonerLevel
                         : "N/A"}
                     </h2>
-                  </div>
+                  </div>§
                 </div>
               </div>
               <div className="w-full pb-4 flex flex-col items-center justify-center">
@@ -222,6 +222,7 @@ export default function Home({ auth }) {
                         : data.info.gameMode === "CHERRY"
                         ? "Arena"
                         : data.info.gameMode;
+                      console.log(data.info);
 
                     // Convert gameDuration to hours, minutes and seconds
                     const hours = Math.floor(data.info.gameDuration / 3600);
