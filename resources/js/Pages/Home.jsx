@@ -24,30 +24,6 @@ export default function Home({ auth }) {
 
   let promise = null;
 
-  function switchranktype(rank) {
-    switch (rank) {
-      case "IRON":
-        return <Badge color="gray">Iron</Badge>;
-      case "BRONZE":
-        return <Badge color="brown">Bronze</Badge>;
-      case "SILVER":
-        return <Badge color="gray">Silver</Badge>;
-      case "GOLD":
-        return <Badge color="yellow">Gold</Badge>;
-      case "PLATINUM":
-        return <Badge color="teal">Platinum</Badge>;
-      case "DIAMOND":
-        return <Badge color="blue">Diamond</Badge>;
-      case "MASTER":
-        return <Badge color="purple">Master</Badge>;
-      case "GRANDMASTER":
-        return <Badge color="red">Grandmaster</Badge>;
-      case "CHALLENGER":
-        return <Badge color="orange">Challenger</Badge>;
-      default:
-        return <Badge color="gray">Default</Badge>;
-    }
-  }
   function fetchMatchIds(queueType = "", puuid = apiData?.data1.puuid) {
     promise = axios
       .get(`/api/lol/match/v5/matches/by-puuid/${puuid}/ids`, {
@@ -162,14 +138,14 @@ export default function Home({ auth }) {
                 {apiData?.data3?.map((data) => (
                   <div className="w-full p-5" key={data.id}>
                     <div className="">
-                      <h1 className="text-lg">
+                      <h1 className="text-lg font-bold">
                         {data.queueType.split("_")[0] +
                           " " +
                           data.queueType.split("_")[1]}
                       </h1>
                       <h1 className="text-lg font-semibold">
                         {data.tier} {data.rank}
-                        {data.leaguePoints}LP
+                        {data.leaguePoints} LP
                       </h1>
                     </div>
                     <div className="">

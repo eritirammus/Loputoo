@@ -64,9 +64,6 @@ export default function Nav({
               <ApplicationLogo />
             </Link>
           </div>
-          <Link href="/Tierlist">
-            <button className="col-span-1">Tierlist</button>
-          </Link>
         </div>
       </div>
       <div className="p-4 sm:px-7">
