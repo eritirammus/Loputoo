@@ -109,7 +109,7 @@ export default function Home({ auth }) {
                     {apiData && apiData.data2 ? (
                       <AvatarImage
                         src={
-                          "/profileicon/" + apiData.data2.profileIconId + ".png"
+                          "https://ddragon.leagueoflegends.com/cdn/14.11.1/img/" + apiData.data2.profileIconId + ".png"
                         }
                       />
                     ) : (
