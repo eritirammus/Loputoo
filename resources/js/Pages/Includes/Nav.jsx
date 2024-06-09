@@ -8,6 +8,13 @@ import { Link } from "@inertiajs/react";
 import axios from "axios";
 import { Search } from "lucide-react";
 import { Button } from "@/Components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 
 export default function Nav({
   query,
@@ -42,13 +49,14 @@ export default function Nav({
           },
         })
         .then((response) => {
+          localStorage.setItem("searchedUserPUUID", response.data.data1?.puuid);
           setApiData(response.data);
-          fetchMatchData("", response.data1?.puuid);
-          fetchMatchIds("");
-          console.log(apiData);
         })
         .catch((error) => {
           console.log("Error:", error);
+        })
+        .finally(() => {
+          fetchMatchIds("", localStorage.getItem("searchedUserPUUID"));
         });
     } else {
       console.log("Your platform/region/gamename hasn't been selected");
@@ -58,104 +66,100 @@ export default function Nav({
   return (
     <nav>
       <div>
-        <div className="grid grid-cols-4 sm:grid-cols-4 p-4 sm:px-7 items-center font-bold">
+        <div className="grid grid-cols-5 sm:grid-cols-5 p-4 sm:px-7 items-center font-bold">
           <div className="justify-start col-span-1">
             <Link href="/">
               <ApplicationLogo />
             </Link>
           </div>
-        </div>
-      </div>
-      <div className="p-4 sm:px-7">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSearch();
-          }}
-          className="grid grid-cols-8 grid-rows-2 rounded-2xl gap-y-4"
-        >
-          <div className="grid grid-cols-2 row-start-1 col-span-8 gap-x-4">
-            <select
-              name="platform"
-              id="platform"
-              className="bg-compBlue p-4 rounded-xl h-full w-full col-span-1"
-              onChange={(e) => {
-                setPlatform(e.target.value);
-              }}
-            >
-              <option value="" select>
-                <div className="">Select platform</div>
-              </option>
-              <option value="americas">Americas</option>
-              <option value="asia">Asia</option>
-              <option value="europe">Europe</option>
-              <option value="sea">SEA</option>
-            </select>
-            <select
-              name="region"
-              id="region"
-              className="bg-compBlue p-4 rounded-xl h-full w-full col-span-1"
-              onChange={(e) => {
-                setRegion(e.target.value);
-              }}
-            >
+
+          <Select
+            name="platform"
+            id="platform"
+            onValueChange={setPlatform}
+            defaultValue={platform}
+          >
+            <SelectTrigger className="">
+              <SelectValue placeholder="Select Platform" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="americas">Americas</SelectItem>
+              <SelectItem value="asia">Asia</SelectItem>
+              <SelectItem value="europe">Europe</SelectItem>
+              <SelectItem value="sea">SEA</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select name="region" id="region" onValueChange={setRegion}>
+            <SelectTrigger className="">
+              <SelectValue placeholder="Select Platform" />
+            </SelectTrigger>
+            <SelectContent>
               {platform === "" && (
                 <>
-                  <option value="" selected>
+                  <SelectItem value="americas" selected>
                     Region
-                  </option>
+                  </SelectItem>
                 </>
               )}
               {platform === "americas" && (
                 <>
-                  <option value="br1">Brazil</option>
-                  <option value="na1">NA</option>
-                  <option value="oc1">OCE</option>
-                  <option value="la1">LAN</option>
-                  <option value="la2">LAS</option>
+                  <SelectItem value="br1">Brazil</SelectItem>
+                  <SelectItem value="na1">NA</SelectItem>
+                  <SelectItem value="oc1">OCE</SelectItem>
+                  <SelectItem value="la1">LAN</SelectItem>
+                  <SelectItem value="la2">LAS</SelectItem>
                 </>
               )}
               {platform === "asia" && (
                 <>
-                  <option value="jp1">Japan</option>
-                  <option value="kr">Korea</option>
+                  <SelectItem value="jp1">Japan</SelectItem>
+                  <SelectItem value="kr">Korea</SelectItem>
                 </>
               )}
               {platform === "europe" && (
                 <>
-                  <option value="euw1">Europe West</option>
-                  <option value="eun1">Europe Nordic & East</option>
-                  <option value="ru">Russia</option>
-                  <option value="tr1">Turkey</option>
+                  <SelectItem value="euw1">Europe West</SelectItem>
+                  <SelectItem value="eun1">Europe Nordic & East</SelectItem>
+                  <SelectItem value="ru">Russia</SelectItem>
+                  <SelectItem value="tr1">Turkey</SelectItem>
                 </>
               )}
               {platform === "sea" && (
                 <>
-                  <option value="sea">SEA</option>
+                  <SelectItem value="sea">SEA</SelectItem>
                 </>
               )}
-            </select>
-          </div>
-
-          <div className="row-start-2 col-span-8 gap-x-4 flex items-center">
-            <Input
-              onChange={(e) => {
-                setQuery(e.target.value);
-              }}
-              className="w-full border-none bg-compBlue rounded-xl p-4"
-              onTouchStart={(e) => {
+            </SelectContent>
+          </Select>
+          <div className="p-4 sm:px-7">
+            <form
+              onSubmit={(e) => {
                 e.preventDefault();
+                handleSearch();
               }}
-            />
-            <button
-              type="submit"
-              value="search"
-              className="h-full flex justify-center items-center"
+              className=" grid-rows-2 rounded-2xl gap-y-4"
             >
-              <Search size={28} />
-            </button>
+              <div className="grid-row-start-2 gap-x-4 flex items-center">
+                <Input
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                  }}
+                  className="w-full border-none bg-compBlue rounded-xl p-4"
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                  }}
+                />
+                <button
+                  type="submit"
+                  value="search"
+                  className="h-full flex justify-center items-center"
+                >
+                  <Search size={28} />
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </nav>
   );

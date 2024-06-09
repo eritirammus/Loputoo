@@ -54,9 +54,10 @@ class RiotController extends Controller
     {
         $platform = request()->get('platform');
         $queueType = request()->get('queueType');
+        $start = request()->get('start');
         $matchIds = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
-        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids?' . "count=20&type=" . $queueType);
+        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids?' . "count=5&type=" . $queueType . "&start=" . $start);
         Log::info($matchIds);
 
         $matchDatas = [];
@@ -72,6 +73,6 @@ class RiotController extends Controller
                 return response()->json(['error' => "Failed to fetch Riot api on match datas"]);
             }
         }
-        return response()->json(['data1' => $matchIds->json(), 'data2' => $matchDatas]);
+        return response()->json($matchDatas);
     }
 }
