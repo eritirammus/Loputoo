@@ -56,7 +56,7 @@ class RiotController extends Controller
         $queueType = request()->get('queueType');
         $matchIds = Http::withHeaders([
             'X-Riot-Token' => env('VITE_LOL_API_KEY')
-        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids?' . "count=5&type=" . $queueType);
+        ])->get('https://' . $platform . '.api.riotgames.com/lol/match/v5/matches/by-puuid/' . $puuid . '/ids?' . "count=20&type=" . $queueType);
         Log::info($matchIds);
 
         $matchDatas = [];

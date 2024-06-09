@@ -83,7 +83,7 @@ export default function Nav({
                 setPlatform(e.target.value);
               }}
             >
-              <option value="" selected>
+              <option value="" select>
                 <div className="">Select platform</div>
               </option>
               <option value="americas">Americas</option>

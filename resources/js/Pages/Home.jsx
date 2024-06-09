@@ -127,7 +127,8 @@ export default function Home({ auth }) {
                         ? apiData.data2.summonerLevel
                         : "N/A"}
                     </h2>
-                  </div>§
+                  </div>
+                  §
                 </div>
               </div>
               <div className="w-full pb-4 flex flex-col items-center justify-center">
@@ -139,12 +140,25 @@ export default function Home({ auth }) {
                   <div className="w-full p-5" key={data.id}>
                     <div className="">
                       <h1 className="text-lg font-bold">
-                        {data.queueType.split("_")[0] +
-                          " " +
-                          data.queueType.split("_")[1]}
+                        {data.queueType.includes("_") ? (
+                          <h1 className="text-lg font-bold">
+                            {data.queueType.split("_")[0] +
+                              " " +
+                              data.queueType.split("_")[1]}
+                              
+                          </h1>
+                        ) : (
+                          <h1 className="text-lg font-bold">
+                          {data.queueType == "CHERRY" ? "ARENA" : data.queueType}</h1>         
+                        )}
+                        
                       </h1>
                       <h1 className="text-lg font-semibold">
-                        {data.tier} {data.rank}
+                        <div>
+
+                        </div>
+                        {data.tier} 
+                        {data.rank}
                         {data.leaguePoints} LP
                       </h1>
                     </div>
@@ -193,28 +207,24 @@ export default function Home({ auth }) {
                 {MatchIds &&
                   MatchIds.data2?.map((data) => {
                     const gameMode =
-                      data.info.gameMode === "CLASSIC"
-                        ? "Draft"
-                        : data.info.gameMode === "CHERRY"
+                        data.info.gameMode === "CHERRY"
                         ? "Arena"
                         : data.info.gameMode;
-                      console.log(data.info);
-
+                    console.log(data.info);
                     // Convert gameDuration to hours, minutes and seconds
                     const hours = Math.floor(data.info.gameDuration / 3600);
                     const minutes = Math.floor(
                       (data.info.gameDuration % 3600) / 60
                     );
                     const seconds = data.info.gameDuration % 60;
-
                     return (
                       <div
-                        className="bg-bgBlue sm:rounded-xl p-4 text-textPurple"
+                        className="bg-bgBlue sm:rounded-xl p-4 text-textPurple "
                         key={data}
                       >
                         <h1 className="text-lg">{gameMode}</h1>
                         {hours > 0 && (
-                          <h1 className="text-lg">
+                          <h1 className="text-lg font-semibold">
                             {hours}h {minutes}m {seconds}s
                           </h1>
                         )}
@@ -223,6 +233,35 @@ export default function Home({ auth }) {
                             {minutes}m {seconds}s
                           </h1>
                         )}
+                        <div className="flex gap-2">
+                          {data.info.teams.map((team) => (
+                            <div className="flex flex-col w-1/2 gap-2">
+                              {data.info.participants.map((participant) => {
+                                if (participant.teamId === team.teamId) {
+                                  return (
+                                    <div className="flex gap-2">
+                                      <Avatar className="h-8 w-8">
+                                        <AvatarImage
+                                          src={
+                                            "https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/" +
+                                            participant.championName +
+                                            ".png"
+                                          }
+                                        />
+                                      </Avatar>
+                                      <div className="flex flex-col gap-1">
+                                        <h1>{participant.summonerName}</h1>
+                                        <h1>
+                                          {participant.championLevel}
+                                        </h1>
+                                      </div>
+                                    </div>
+                                  );
+                                }
+                              })}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     );
                   })}
