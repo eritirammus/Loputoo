@@ -209,12 +209,12 @@ export default function Home({ auth }) {
                   </h1>
                   {apiData?.data3?.map((data) => (
                     <div
-                      className="w-full p-5 flex flex-col gap-2 "
+                      className={data.queueType == "CHERRY" ? "hidden" : "w-full p-5 flex flex-col gap-2"}
                       key={data.id}
                     >
                       <div className="flex items-center gap-2 bg">
                         <img
-                          className={data.tier ? "h-32" : "hidden"}
+                          className={data.tier ? "h-28" : "hidden"}
                           src={`/RankedEmblemsLatest/Rank=${data.tier}.png`}
                           alt="Rank Emblem"
                         />
@@ -236,10 +236,9 @@ export default function Home({ auth }) {
                               )}
                             </h1>
                             <h1 className="text-lg font-semibold1">
-                              <div></div>
-                              {data.tier}
-                              {data.rank}
-                              {data.leaguePoints} LP
+                              <div className="">
+                                {data.tier} {data.rank} {data.leaguePoints}LP
+                              </div>
                             </h1>
                           </div>
                         </div>
@@ -282,12 +281,6 @@ export default function Home({ auth }) {
                     <h2 className="font-bold text-textPurple text-xl">
                       Recent Matches
                     </h2>
-                    <Button
-                      className="font-semibold text-textPurple text-lg"
-                      variant="primary"
-                    >
-                      View All
-                    </Button>
                   </div>
                   {MatchIds &&
                     MatchIds?.map((data) => {
@@ -319,12 +312,11 @@ export default function Home({ auth }) {
                         >
                           <Collapsible>
                             <CollapsibleTrigger className="w-full">
-                              <div className="w-full grid grid-cols-7">
+                              <div className="w-full grid grid-cols-5 items-center">
                                 <div className="text-left">
-                                  <h1 className="text-lg font-bold col-span-1 col-start-1 text-start">
+                                  <h1 className="text-lg font-bold col-span-2 col-start-1 text-start">
                                     {gameMode}
                                   </h1>
-
                                   {hours > 0 && (
                                     <h1 className="text-lg">
                                       {hours}h {minutes}m {seconds}s
@@ -335,10 +327,138 @@ export default function Home({ auth }) {
                                       {minutes}m {seconds}s
                                     </h1>
                                   )}
+                                </div>
+
+                                <div className="flex col-span-1 gap-2">
+                                  <img
+                                    className="h-16 w-16 rounded-xl"
+                                    src={
+                                      selectedPlayerInfo?.championName != 0
+                                        ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/${selectedPlayerInfo.championName}.png`
+                                        : `/EmptyBox.png`
+                                    }
+                                    alt="championName"
+                                  />
+                                  {/* <img
+                                    className="h-8 w-8"
+                                    src={
+                                      selectedPlayerInfo?.summoner1Id != 0
+                                        ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.summoner1Id}.png`
+                                        : `/EmptyBox.png`
+                                    }
+                                    alt="summoner1Id"
+                                  /> */}
+                                  <div className="flex flex-col text-left text-lg">
+                                    <p>
+                                      {selectedPlayerInfo.kills}/
+                                      {selectedPlayerInfo.deaths}/
+                                      {selectedPlayerInfo.assists}
+                                    </p>
+                                    <p
+                                      className={
+                                        (selectedPlayerInfo.kills +
+                                          selectedPlayerInfo.assists) /
+                                          selectedPlayerInfo.deaths <
+                                        1
+                                          ? "text-red-500"
+                                          : (selectedPlayerInfo.kills +
+                                              selectedPlayerInfo.assists) /
+                                              selectedPlayerInfo.deaths ===
+                                            1
+                                          ? "text-yellow-500"
+                                          : "text-green-500"
+                                      }
+                                    >
+                                      {(
+                                        (selectedPlayerInfo.kills +
+                                          selectedPlayerInfo.assists) /
+                                        selectedPlayerInfo.deaths
+                                      ).toFixed(2)}{" "}
+                                      KDA
+                                    </p>
+                                    
+                                  </div>
+                                </div>
+                                  <div classname="col-span-1 col-start-3">
+                                    {selectedPlayerInfo.win == true ? (
+                                      <h1 className="font-semibold text-2xl text-green-500">Victory</h1>
+                                    ) : (
+                                      <h1 className="font-semibold text-2xl text-red-500">Defeat</h1>
+                                    )}
+                                  </div>
+                                <div className="w-full h-18 gap-2 col-start-4 col-span-1">
+                                  <div className="grid grid-cols-4 grid-rows-2 ">
+                                    <img
+                                      className={selectedPlayerInfo?.item0 != 0 ? "h-8 w-8 rounded-xl" : "hidden"}
+                                      src={
+                                        selectedPlayerInfo?.item0 != 0
+                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item0}.png`
+                                          : `/EmptyBox.png`
+                                      }
+                                      alt="item0"
+                                    />
+                                    <img
+                                      className={selectedPlayerInfo?.item1 != 0 ? "h-8 w-8 rounded-xl" : "hidden"}
+                                      src={
+                                        selectedPlayerInfo?.item1 != 0
+                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item1}.png`
+                                          : `/EmptyBox.png`
+                                      }
+                                      alt="item1"
+                                    />
+                                    <img
+                                      className={selectedPlayerInfo?.item2 != 0 ? "h-8 w-8 rounded-xl" : "hidden"}
+                                      src={
+                                        selectedPlayerInfo?.item2 != 0
+                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item2}.png`
+                                          : `/EmptyBox.png`
+                                      }
+                                      alt="item2"
+                                    />
+
+                                    <img
+                                      className={selectedPlayerInfo?.item3 != 0 ? "h-8 w-8 rounded-xl" : "hidden"}
+                                      src={
+                                        selectedPlayerInfo?.item3 != 0
+                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item3}.png`
+                                          : `/EmptyBox.png`
+                                      }
+                                      alt="item3"
+                                    />
+                                    <img
+                                      className={selectedPlayerInfo?.item4 != 0 ? "h-8 w-8 rounded-xl" : "hidden"}
+                                      src={
+                                        selectedPlayerInfo?.item4 != 0
+                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item4}.png`
+                                          : `/EmptyBox.png`
+                                      }
+                                      alt="item4"
+                                    />
+                                    <img
+                                      className={selectedPlayerInfo?.item5 != 0 ? "h-8 w-8 rounded-xl" : "hidden"}
+                                      src={
+                                        selectedPlayerInfo?.item5 != 0
+                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item5}.png`
+                                          : `/EmptyBox.png`
+                                      }
+                                      alt="item5"
+                                    />
+                                    <img
+                                      className={selectedPlayerInfo?.item6 != 0 ? "h-8 w-8 rounded-xl" : "hidden"}
+                                      src={
+                                        selectedPlayerInfo?.item6 != 0
+                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item6}.png`
+                                          : `/EmptyBox.png`
+                                      }
+                                      alt="item6"
+                                    />
+                                  </div>
+                                </div>
+                                <div col-span-1 col-start-7 items-center>
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger>
-                                        <p>
+                                        <p className="text-left">
                                           {formatTimeAgo(
                                             data.info.gameStartTimestamp
                                           )}
@@ -353,85 +473,6 @@ export default function Home({ auth }) {
                                       </TooltipContent>
                                     </Tooltip>
                                   </TooltipProvider>
-                                </div>
-                                <div>
-                                  <img
-                                    className="h-18 w-18"
-                                    src={
-                                      selectedPlayerInfo?.item0 != 0
-                                        ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item0}.png`
-                                        : `/EmptyBox.png`
-                                    }
-                                    alt="item0"
-                                  />
-                                </div>
-                                <div className="w-full h-26 gap-2 col-start-3 col-span-2">
-                                  <div className="flex flex-wrap gap-1 h-full">
-                                    <img
-                                      className="h-10 w-10"
-                                      src={
-                                        selectedPlayerInfo?.item0 != 0
-                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item0}.png`
-                                          : `/EmptyBox.png`
-                                      }
-                                      alt="item0"
-                                    />
-                                    <img
-                                      className="h-10 w-10"
-                                      src={
-                                        selectedPlayerInfo?.item1 != 0
-                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item1}.png`
-                                          : `/EmptyBox.png`
-                                      }
-                                      alt="item1"
-                                    />
-                                    <img
-                                      className="h-10 w-10"
-                                      src={
-                                        selectedPlayerInfo?.item2 != 0
-                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item2}.png`
-                                          : `/EmptyBox.png`
-                                      }
-                                      alt="item2"
-                                    />
-
-                                    <img
-                                      className="h-10 w-10"
-                                      src={
-                                        selectedPlayerInfo?.item3 != 0
-                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item3}.png`
-                                          : `/EmptyBox.png`
-                                      }
-                                      alt="item3"
-                                    />
-                                    <img
-                                      className="h-10 w-10"
-                                      src={
-                                        selectedPlayerInfo?.item4 != 0
-                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item4}.png`
-                                          : `/EmptyBox.png`
-                                      }
-                                      alt="item4"
-                                    />
-                                    <img
-                                      className="h-10 w-10"
-                                      src={
-                                        selectedPlayerInfo?.item5 != 0
-                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item5}.png`
-                                          : `/EmptyBox.png`
-                                      }
-                                      alt="item5"
-                                    />
-                                    <img
-                                      className="h-10 w-10"
-                                      src={
-                                        selectedPlayerInfo?.item6 != 0
-                                          ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/item/${selectedPlayerInfo?.item6}.png`
-                                          : `/EmptyBox.png`
-                                      }
-                                      alt="item6"
-                                    />
-                                  </div>
                                 </div>
                               </div>
                             </CollapsibleTrigger>
@@ -461,8 +502,8 @@ export default function Home({ auth }) {
                                               "Fiddlesticks";
                                           }
                                           return (
-                                            <div className="flex gap-2">
-                                              <Avatar className="h-8 w-8">
+                                            <div className="flex">
+                                              <Avatar className="h-12 w-12">
                                                 <AvatarImage
                                                   src={
                                                     "https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/" +
@@ -470,6 +511,11 @@ export default function Home({ auth }) {
                                                     ".png"
                                                   }
                                                 />
+                                                <p
+                                                  className={
+                                                    participant.champLevel
+                                                  }
+                                                ></p>
                                               </Avatar>
                                               <div className="flex flex-col gap-1">
                                                 <h1
@@ -483,9 +529,7 @@ export default function Home({ auth }) {
                                                   {`${participant.riotIdGameName}#${participant.riotIdTagline}` ||
                                                     participant.championName}
                                                 </h1>
-                                                <h1>
-                                                  {participant.championLevel}
-                                                </h1>
+                                                <h1></h1>
                                               </div>
                                             </div>
                                           );

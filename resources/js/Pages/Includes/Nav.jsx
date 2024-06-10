@@ -66,7 +66,7 @@ export default function Nav({
   return (
     <nav>
       <div>
-        <div className="grid grid-cols-5 sm:grid-cols-5 p-4 sm:px-7 items-center font-bold">
+        <div className="grid grid-cols-12 sm:grid-cols-12 gap-4 p-4 sm:px-7 items-center font-bold">
           <div className="justify-start col-span-1">
             <Link href="/">
               <ApplicationLogo />
@@ -79,7 +79,7 @@ export default function Nav({
             onValueChange={setPlatform}
             defaultValue={platform}
           >
-            <SelectTrigger className="">
+            <SelectTrigger className="col-span-2">
               <SelectValue placeholder="Select Platform" />
             </SelectTrigger>
             <SelectContent>
@@ -90,7 +90,7 @@ export default function Nav({
             </SelectContent>
           </Select>
           <Select name="region" id="region" onValueChange={setRegion}>
-            <SelectTrigger className="">
+            <SelectTrigger className="col-span-2">
               <SelectValue placeholder="Select Platform" />
             </SelectTrigger>
             <SelectContent>
@@ -131,20 +131,20 @@ export default function Nav({
               )}
             </SelectContent>
           </Select>
-          <div className="p-4 sm:px-7">
+          <div className="py-2 col-span-7 col-start-6">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSearch();
               }}
-              className=" grid-rows-2 rounded-2xl gap-y-4"
+              className=" grid-rows-2 rounded-2xl gap-y-4 "
             >
-              <div className="grid-row-start-2 gap-x-4 flex items-center">
+              <div className="gap-x-2 flex items-center">
                 <Input
                   onChange={(e) => {
                     setQuery(e.target.value);
                   }}
-                  className="w-full border-none bg-compBlue rounded-xl p-4"
+                  className="w-full border-none bg-compBlue rounded-lg p-2"
                   onTouchStart={(e) => {
                     e.preventDefault();
                   }}
@@ -154,7 +154,7 @@ export default function Nav({
                   value="search"
                   className="h-full flex justify-center items-center"
                 >
-                  <Search size={28} />
+                  <Search size={24} />
                 </button>
               </div>
             </form>
