@@ -334,7 +334,7 @@ export default function Home({ auth }) {
                                     className="h-16 w-16 rounded-xl"
                                     src={
                                       selectedPlayerInfo?.championName != 0
-                                        ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/${selectedPlayerInfo.championName}.png`
+                                        ? `https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/${selectedPlayerInfo?.championName}.png`
                                         : `/EmptyBox.png`
                                     }
                                     alt="championName"
@@ -350,20 +350,20 @@ export default function Home({ auth }) {
                                   /> */}
                                   <div className="flex flex-col text-left text-lg">
                                     <p>
-                                      {selectedPlayerInfo.kills}/
-                                      {selectedPlayerInfo.deaths}/
-                                      {selectedPlayerInfo.assists}
+                                      {selectedPlayerInfo?.kills}/
+                                      {selectedPlayerInfo?.deaths}/
+                                      {selectedPlayerInfo?.assists}
                                     </p>
                                     <p
                                       className={
-                                        (selectedPlayerInfo.kills +
-                                          selectedPlayerInfo.assists) /
-                                          selectedPlayerInfo.deaths <
+                                        (selectedPlayerInfo?.kills +
+                                          selectedPlayerInfo?.assists) /
+                                          selectedPlayerInfo?.deaths <
                                         1
                                           ? "text-red-500"
-                                          : (selectedPlayerInfo.kills +
-                                              selectedPlayerInfo.assists) /
-                                              selectedPlayerInfo.deaths ===
+                                          : (selectedPlayerInfo?.kills +
+                                              selectedPlayerInfo?.assists) /
+                                              selectedPlayerInfo?.deaths ===
                                             1
                                           ? "text-yellow-500"
                                           : "text-green-500"
@@ -507,7 +507,7 @@ export default function Home({ auth }) {
                                                 <AvatarImage
                                                   src={
                                                     "https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/" +
-                                                    participant.championName +
+                                                    participant?.championName +
                                                     ".png"
                                                   }
                                                 />
@@ -527,7 +527,7 @@ export default function Home({ auth }) {
                                                   }
                                                 >
                                                   {`${participant.riotIdGameName}#${participant.riotIdTagline}` ||
-                                                    participant.championName}
+                                                    participant?.championName}
                                                 </h1>
                                                 <h1></h1>
                                               </div>
